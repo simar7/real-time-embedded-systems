@@ -1,0 +1,191 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+N:\ece455\A1-hw\lab1.uvproj
+Project File Date:  05/22/2015
+
+<h2>Output:</h2>
+Build target 'LPC1768 Flash'
+compiling main.c...
+linking...
+Program Size: Code=3990 RO-data=6526 RW-data=16 ZI-data=608  
+"lab1.axf" - 0 Error(s), 0 Warning(s).
+Load "N:\\ece455\\A1-hw\\lab1.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'LPC1768 Flash'
+compiling main.c...
+linking...
+Program Size: Code=4052 RO-data=6528 RW-data=12 ZI-data=612  
+"lab1.axf" - 0 Error(s), 0 Warning(s).
+Load "N:\\ece455\\A1-hw\\lab1.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'LPC1768 Flash'
+compiling main.c...
+linking...
+Program Size: Code=4050 RO-data=6526 RW-data=12 ZI-data=612  
+"lab1.axf" - 0 Error(s), 0 Warning(s).
+Load "N:\\ece455\\A1-hw\\lab1.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'LPC1768 Flash'
+compiling main.c...
+linking...
+Program Size: Code=3028 RO-data=6596 RW-data=12 ZI-data=612  
+"lab1.axf" - 0 Error(s), 0 Warning(s).
+Load "N:\\ece455\\A1-hw\\lab1.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'LPC1768 Flash'
+compiling main.c...
+linking...
+Program Size: Code=3028 RO-data=6596 RW-data=12 ZI-data=612  
+"lab1.axf" - 0 Error(s), 0 Warning(s).
+Load "N:\\ece455\\A1-hw\\lab1.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'LPC1768 Flash'
+compiling main.c...
+linking...
+Program Size: Code=3028 RO-data=6596 RW-data=12 ZI-data=612  
+"lab1.axf" - 0 Error(s), 0 Warning(s).
+Build target 'LPC1768 Flash'
+compiling main.c...
+main.c(14): error:  #20: identifier "milliseconds" is undefined
+main.c(15): error:  #20: identifier "time" is undefined
+main.c(15): error:  #20: identifier "g_milliseconds" is undefined
+main.c(21): error:  #20: identifier "IR" is undefined
+main.c(32): warning:  #223-D: function "BoardInit" declared implicitly
+Target not created
+Build target 'LPC1768 Flash'
+compiling main.c...
+main.c(15): error:  #20: identifier "time" is undefined
+main.c(15): error:  #20: identifier "g_milliseconds" is undefined
+main.c(21): error:  #20: identifier "IR" is undefined
+main.c(32): warning:  #223-D: function "BoardInit" declared implicitly
+Target not created
+Build target 'LPC1768 Flash'
+compiling main.c...
+main.c(22): error:  #20: identifier "IR" is undefined
+main.c(33): warning:  #223-D: function "BoardInit" declared implicitly
+Target not created
+Build target 'LPC1768 Flash'
+compiling main.c...
+linking...
+Program Size: Code=3968 RO-data=6528 RW-data=16 ZI-data=608  
+"lab1.axf" - 0 Error(s), 0 Warning(s).
+Build target 'LPC1768 Flash'
+compiling main.c...
+linking...
+Program Size: Code=3974 RO-data=6526 RW-data=16 ZI-data=608  
+"lab1.axf" - 0 Error(s), 0 Warning(s).
+Load "N:\\ece455\\A1-hw\\lab1.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'LPC1768 Flash'
+compiling main.c...
+main.c(38): error:  #268: declaration may not appear after executable statement in block
+Target not created
+Build target 'LPC1768 Flash'
+compiling main.c...
+main.c(38): error:  #268: declaration may not appear after executable statement in block
+Target not created
+Build target 'LPC1768 Flash'
+compiling main.c...
+linking...
+Program Size: Code=3974 RO-data=6526 RW-data=16 ZI-data=608  
+"lab1.axf" - 0 Error(s), 0 Warning(s).
+Load "N:\\ece455\\A1-hw\\lab1.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'LPC1768 Flash'
+compiling main.c...
+linking...
+Program Size: Code=3974 RO-data=6526 RW-data=16 ZI-data=608  
+"lab1.axf" - 0 Error(s), 0 Warning(s).
+Build target 'LPC1768 Flash'
+compiling main.c...
+linking...
+Program Size: Code=3974 RO-data=6526 RW-data=16 ZI-data=608  
+"lab1.axf" - 0 Error(s), 0 Warning(s).
+Load "N:\\ece455\\A1-hw\\lab1.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'LPC1768 Flash'
+compiling main.c...
+linking...
+Program Size: Code=3968 RO-data=6528 RW-data=16 ZI-data=608  
+"lab1.axf" - 0 Error(s), 0 Warning(s).
+Load "N:\\ece455\\A1-hw\\lab1.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'LPC1768 Flash'
+compiling main.c...
+main.c(39): error:  #20: identifier "cur_time" is undefined
+Target not created
+Build target 'LPC1768 Flash'
+compiling main.c...
+linking...
+Program Size: Code=4044 RO-data=6528 RW-data=16 ZI-data=608  
+"lab1.axf" - 0 Error(s), 0 Warning(s).
+Load "N:\\ece455\\A1-hw\\lab1.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'LPC1768 Flash'
+compiling main.c...
+linking...
+Program Size: Code=4050 RO-data=6526 RW-data=16 ZI-data=608  
+"lab1.axf" - 0 Error(s), 0 Warning(s).
+Load "N:\\ece455\\A1-hw\\lab1.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'LPC1768 Flash'
+compiling main.c...
+linking...
+Program Size: Code=4078 RO-data=6526 RW-data=32 ZI-data=608  
+"lab1.axf" - 0 Error(s), 0 Warning(s).
+Build target 'LPC1768 Flash'
+compiling main.c...
+linking...
+Program Size: Code=4078 RO-data=6526 RW-data=32 ZI-data=608  
+"lab1.axf" - 0 Error(s), 0 Warning(s).
+Load "N:\\ece455\\A1-hw\\lab1.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'LPC1768 Flash'
+compiling main.c...
+linking...
+Program Size: Code=4064 RO-data=6528 RW-data=32 ZI-data=608  
+"lab1.axf" - 0 Error(s), 0 Warning(s).
+Load "N:\\ece455\\A1-hw\\lab1.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'LPC1768 Flash'
+compiling main.c...
+linking...
+Program Size: Code=4078 RO-data=6526 RW-data=32 ZI-data=608  
+"lab1.axf" - 0 Error(s), 0 Warning(s).
+Build target 'LPC1768 Flash'
+linking...
+Program Size: Code=4078 RO-data=6526 RW-data=32 ZI-data=608  
+"lab1.axf" - 0 Error(s), 0 Warning(s).
+Load "N:\\ece455\\A1-hw\\lab1.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
