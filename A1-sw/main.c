@@ -1,26 +1,25 @@
-#include<lpc17xx.h>
-#include"glcd.h"
+#include <lpc17xx.h>
+#include "glcd.h"
+#include <stdio.h>
 
-/*
-void BoardInit() {
-    LPC_TIM0->TCR=0x02;
-    LPC_TIM0>TCR=0x02;  //resettimer
-    LPC_TIM0>TCR=0x01;  //enabletimer
-    LPC_TIM0>MR0=2048;  //match value(canbeanything)
-    LPC_TIM0>MCR|=0x03; //on match, generate interrupt and reset 
-    NVIC_EnableIRQ(TIMER0_IRQn); //allow interrupts from the timer
-    
-    //SysTick_Config(SystemFrequency/10000);
-}
-*/
+uint32_t g_ms;
 
-int timer_subroutine() {
+int timer_subroutine(uint32_t milliseconds) {
     int i, j;
+		char time[64];
+	
     GLCD_DisplayString(1,1,1,"START");
-    for(i=0; i<60000; ++i) {
-            for(j=0; j<25000; ++j) {
-                __nop();
-            }
+    for(i=0; i<milliseconds; ++i) {
+			for(j=0; j<25000; ++j) {
+				__nop();
+      }
+				
+			sprintf(time, "%02d:%02d",(i/60000),(i/1000)%60);
+			
+			if (i % 1000 == 0) {
+				 GLCD_DisplayString(7, 1, 1, (unsigned char *)time);
+			}
+		
     }
     GLCD_DisplayString(2,2,1,"END");
     return 0;
@@ -28,13 +27,11 @@ int timer_subroutine() {
 
 
 int main(void) {
-
     SystemInit();
-    //BoardInit();
     GLCD_Init();
     GLCD_Clear(White);
-    //GLCD_DisplayString(0,0,1,"Hello,world!");
     __disable_irq();
-    timer_subroutine();
+    g_ms = 1000;
+		timer_subroutine(g_ms);
     return 0;
 }
