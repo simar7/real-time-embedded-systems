@@ -32,4 +32,5 @@
 *.zip
 
 # Debug files
+*.axf
 *.dSYM/
