@@ -2,27 +2,28 @@
 #include "glcd.h"
 #include <stdio.h>
 
-uint32_t g_ms;
+uint32_t ms_coeff = 1000;
+uint32_t sec_in_min = 60;
+uint32_t ms_in_min = 60000;
+uint32_t min_to_run = 10;
+uint32_t magic_number = 16550;
 
 int timer_subroutine(uint32_t milliseconds) {
     int i, j;
-		char time[128];
+		char cur_time[128];
 	
-    GLCD_DisplayString(1,1,1,"A1 - START");
-		GLCD_DisplayString(2,1,1,"Author: s244sing");
     for(i=1; i<=milliseconds; ++i) {
-			for(j=0; j<=16550; ++j) {
+			for(j=0; j<=magic_number; ++j) {
 				__nop();
       }
 				
-			sprintf(time, "%02d:%02d",(i/60000),(i/1000)%60);
+			sprintf(cur_time, "%02d:%02d",(i/ms_in_min),(i/ms_coeff)%sec_in_min);
 			
-			if (i % 1000 == 0) {
-				 GLCD_DisplayString(7, 1, 1, (unsigned char *)time);
+			if (i % ms_coeff == 0) {
+				 GLCD_DisplayString(5, 5, 1, (unsigned char *)cur_time);
 			}
 		
     }
-    GLCD_DisplayString(3,1,1,"A1 - END");
     return 0;
 }
 
@@ -30,10 +31,18 @@ int timer_subroutine(uint32_t milliseconds) {
 int main(void) {
     SystemInit();
     GLCD_Init();
-    GLCD_Clear(White);
+    GLCD_Clear(Black);
+		GLCD_SetTextColor(Red);
+		GLCD_SetBackColor(Black);
     __disable_irq();
-    g_ms = 6000000;
-		timer_subroutine(g_ms);
+
+		GLCD_DisplayString(1, 1, 1, "Status: ");
+		GLCD_DisplayString(1, 9, 1, "START");
+		GLCD_DisplayString(4, 5, 1, "TIMER");
+	
+		timer_subroutine(min_to_run * ms_in_min);
+	
+		GLCD_DisplayString(1, 9, 1, "END  ");
 		__enable_irq();
     return 0;
 }

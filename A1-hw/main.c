@@ -36,12 +36,16 @@ void TIMER0_IRQHandler() {
 int main(void) {
     SystemInit();
     GLCD_Init();
-    GLCD_Clear(White);
+    GLCD_Clear(Black);
+		GLCD_SetTextColor(Red);
+		GLCD_SetBackColor(Black);
 		__enable_irq();
+	
 		GLCD_DisplayString(1, 1, 1, "Status: ");
 		GLCD_DisplayString(1, 9, 1, "START");
 		GLCD_DisplayString(4, 5, 1, "TIMER");
 		BoardInit();
+	
 		hwInterrupt(min_to_run * ms_in_min);
 		GLCD_DisplayString(1, 9, 1, "END  ");
     return 0;

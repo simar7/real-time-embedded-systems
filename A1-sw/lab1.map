@@ -22,10 +22,10 @@ Section Cross References
     main.o(.text) refers to _printf_percent.o(.ARM.Collect$$_printf_percent$$00000000) for _printf_percent
     main.o(.text) refers to _printf_d.o(.ARM.Collect$$_printf_percent$$00000009) for _printf_d
     main.o(.text) refers to _printf_dec.o(.text) for _printf_int_dec
-    main.o(.text) refers to glcd_spi_lpc1700.o(.text) for GLCD_DisplayString
     main.o(.text) refers to noretval__2sprintf.o(.text) for __2sprintf
+    main.o(.text) refers to glcd_spi_lpc1700.o(.text) for GLCD_DisplayString
     main.o(.text) refers to system_lpc17xx.o(.text) for SystemInit
-    main.o(.text) refers to main.o(.data) for g_ms
+    main.o(.text) refers to main.o(.data) for magic_number
     __2sprintf.o(.text) refers to _printf_char_common.o(.text) for _printf_char_common
     __2sprintf.o(.text) refers to _sputc.o(.text) for _sputc
     noretval__2sprintf.o(.text) refers to _printf_char_common.o(.text) for _printf_char_common
@@ -297,14 +297,9 @@ Image Symbol Table
     .ARM.Collect$$rtexit$$00000004           0x0000016a   Section        6  rtexit2.o(.ARM.Collect$$rtexit$$00000004)
     .text                                    0x00000170   Section       60  startup_lpc17xx.o(.text)
     .text                                    0x000001ac   Section        0  main.o(.text)
-    .text                                    0x000002a0   Section        0  noretval__2sprintf.o(.text)
-    .text                                    0x000002c8   Section        0  heapauxi.o(.text)
-    .text                                    0x000002ce   Section        0  _sputc.o(.text)
-    .text                                    0x000002d8   Section        0  exit.o(.text)
-    .text                                    0x000002e4   Section        8  libspace.o(.text)
-    .text                                    0x000002ec   Section        0  sys_exit.o(.text)
-    .text                                    0x000002f8   Section        2  use_no_semi.o(.text)
-    .text                                    0x000002fa   Section        0  indicate_semi.o(.text)
+    .text                                    0x000002c4   Section        0  noretval__2sprintf.o(.text)
+    .text                                    0x000002ec   Section        0  heapauxi.o(.text)
+    .text                                    0x000002f2   Section        0  _sputc.o(.text)
     .ARM.__at_0x02FC                         0x000002fc   Section        4  startup_lpc17xx.o(.ARM.__at_0x02FC)
     .text                                    0x00000300   Section        0  glcd_spi_lpc1700.o(.text)
     delay                                    0x00000301   Thumb Code    14  glcd_spi_lpc1700.o(.text)
@@ -324,22 +319,27 @@ Image Symbol Table
     .text                                    0x00000fd8   Section        0  _printf_char_common.o(.text)
     _printf_input_char                       0x00000fd9   Thumb Code    10  _printf_char_common.o(.text)
     .text                                    0x00001008   Section       74  sys_stackheap_outer.o(.text)
-    i._is_digit                              0x00001052   Section        0  __printf_wp.o(i._is_digit)
-    .constdata                               0x00001060   Section     6272  glcd_spi_lpc1700.o(.constdata)
-    .constdata                               0x000028e0   Section       17  __printf_flags_wp.o(.constdata)
-    maptable                                 0x000028e0   Data          17  __printf_flags_wp.o(.constdata)
+    .text                                    0x00001052   Section        0  exit.o(.text)
+    .text                                    0x00001060   Section        8  libspace.o(.text)
+    .text                                    0x00001068   Section        0  sys_exit.o(.text)
+    .text                                    0x00001074   Section        2  use_no_semi.o(.text)
+    .text                                    0x00001076   Section        0  indicate_semi.o(.text)
+    i._is_digit                              0x00001076   Section        0  __printf_wp.o(i._is_digit)
+    .constdata                               0x00001084   Section     6272  glcd_spi_lpc1700.o(.constdata)
+    .constdata                               0x00002904   Section       17  __printf_flags_wp.o(.constdata)
+    maptable                                 0x00002904   Data          17  __printf_flags_wp.o(.constdata)
     .data                                    0x10000000   Section        6  glcd_spi_lpc1700.o(.data)
     TextColor                                0x10000000   Data           2  glcd_spi_lpc1700.o(.data)
     BackColor                                0x10000002   Data           2  glcd_spi_lpc1700.o(.data)
     driverCode                               0x10000004   Data           2  glcd_spi_lpc1700.o(.data)
     .data                                    0x10000008   Section        4  system_lpc17xx.o(.data)
-    .data                                    0x1000000c   Section        4  main.o(.data)
-    .bss                                     0x10000010   Section       96  libspace.o(.bss)
-    HEAP                                     0x10000070   Section        0  startup_lpc17xx.o(HEAP)
-    STACK                                    0x10000070   Section      512  startup_lpc17xx.o(STACK)
-    Heap_Mem                                 0x10000070   Data           0  startup_lpc17xx.o(HEAP)
-    Stack_Mem                                0x10000070   Data         512  startup_lpc17xx.o(STACK)
-    __initial_sp                             0x10000270   Data           0  startup_lpc17xx.o(STACK)
+    .data                                    0x1000000c   Section       20  main.o(.data)
+    .bss                                     0x10000020   Section       96  libspace.o(.bss)
+    HEAP                                     0x10000080   Section        0  startup_lpc17xx.o(HEAP)
+    STACK                                    0x10000080   Section      512  startup_lpc17xx.o(STACK)
+    Heap_Mem                                 0x10000080   Data           0  startup_lpc17xx.o(HEAP)
+    Stack_Mem                                0x10000080   Data         512  startup_lpc17xx.o(STACK)
+    __initial_sp                             0x10000280   Data           0  startup_lpc17xx.o(STACK)
 
     Global Symbols
 
@@ -476,21 +476,13 @@ Image Symbol Table
     USB_IRQHandler                           0x0000018b   Thumb Code     0  startup_lpc17xx.o(.text)
     WDT_IRQHandler                           0x0000018b   Thumb Code     0  startup_lpc17xx.o(.text)
     __user_initial_stackheap                 0x0000018d   Thumb Code     0  startup_lpc17xx.o(.text)
-    timer_subroutine                         0x000001ad   Thumb Code   142  main.o(.text)
-    main                                     0x0000023b   Thumb Code    42  main.o(.text)
-    __2sprintf                               0x000002a1   Thumb Code    34  noretval__2sprintf.o(.text)
-    __use_two_region_memory                  0x000002c9   Thumb Code     2  heapauxi.o(.text)
-    __rt_heap_escrow$2region                 0x000002cb   Thumb Code     2  heapauxi.o(.text)
-    __rt_heap_expand$2region                 0x000002cd   Thumb Code     2  heapauxi.o(.text)
-    _sputc                                   0x000002cf   Thumb Code    10  _sputc.o(.text)
-    exit                                     0x000002d9   Thumb Code    12  exit.o(.text)
-    __user_libspace                          0x000002e5   Thumb Code     8  libspace.o(.text)
-    __user_perproc_libspace                  0x000002e5   Thumb Code     0  libspace.o(.text)
-    __user_perthread_libspace                0x000002e5   Thumb Code     0  libspace.o(.text)
-    _sys_exit                                0x000002ed   Thumb Code     8  sys_exit.o(.text)
-    __I$use$semihosting                      0x000002f9   Thumb Code     0  use_no_semi.o(.text)
-    __use_no_semihosting_swi                 0x000002f9   Thumb Code     2  use_no_semi.o(.text)
-    __semihosting_library_function           0x000002fb   Thumb Code     0  indicate_semi.o(.text)
+    timer_subroutine                         0x000001ad   Thumb Code   108  main.o(.text)
+    main                                     0x00000219   Thumb Code   102  main.o(.text)
+    __2sprintf                               0x000002c5   Thumb Code    34  noretval__2sprintf.o(.text)
+    __use_two_region_memory                  0x000002ed   Thumb Code     2  heapauxi.o(.text)
+    __rt_heap_escrow$2region                 0x000002ef   Thumb Code     2  heapauxi.o(.text)
+    __rt_heap_expand$2region                 0x000002f1   Thumb Code     2  heapauxi.o(.text)
+    _sputc                                   0x000002f3   Thumb Code    10  _sputc.o(.text)
     GLCD_Init                                0x00000399   Thumb Code   814  glcd_spi_lpc1700.o(.text)
     GLCD_SetWindow                           0x000006c7   Thumb Code   106  glcd_spi_lpc1700.o(.text)
     GLCD_WindowMax                           0x00000731   Thumb Code    18  glcd_spi_lpc1700.o(.text)
@@ -515,15 +507,27 @@ Image Symbol Table
     _printf_int_common                       0x00000f21   Thumb Code   184  _printf_intcommon.o(.text)
     _printf_char_common                      0x00000fe3   Thumb Code    32  _printf_char_common.o(.text)
     __user_setup_stackheap                   0x00001009   Thumb Code    74  sys_stackheap_outer.o(.text)
-    _is_digit                                0x00001053   Thumb Code    14  __printf_wp.o(i._is_digit)
-    Font_6x8_h                               0x00001060   Data         896  glcd_spi_lpc1700.o(.constdata)
-    Font_16x24_h                             0x000013e0   Data        5376  glcd_spi_lpc1700.o(.constdata)
-    Region$$Table$$Base                      0x000028f4   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x00002914   Number         0  anon$$obj.o(Region$$Table)
+    exit                                     0x00001053   Thumb Code    12  exit.o(.text)
+    __user_libspace                          0x00001061   Thumb Code     8  libspace.o(.text)
+    __user_perproc_libspace                  0x00001061   Thumb Code     0  libspace.o(.text)
+    __user_perthread_libspace                0x00001061   Thumb Code     0  libspace.o(.text)
+    _sys_exit                                0x00001069   Thumb Code     8  sys_exit.o(.text)
+    __I$use$semihosting                      0x00001075   Thumb Code     0  use_no_semi.o(.text)
+    __use_no_semihosting_swi                 0x00001075   Thumb Code     2  use_no_semi.o(.text)
+    __semihosting_library_function           0x00001077   Thumb Code     0  indicate_semi.o(.text)
+    _is_digit                                0x00001077   Thumb Code    14  __printf_wp.o(i._is_digit)
+    Font_6x8_h                               0x00001084   Data         896  glcd_spi_lpc1700.o(.constdata)
+    Font_16x24_h                             0x00001404   Data        5376  glcd_spi_lpc1700.o(.constdata)
+    Region$$Table$$Base                      0x00002918   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x00002938   Number         0  anon$$obj.o(Region$$Table)
     SystemFrequency                          0x10000008   Data           4  system_lpc17xx.o(.data)
-    g_ms                                     0x1000000c   Data           4  main.o(.data)
-    __libspace_start                         0x10000010   Data          96  libspace.o(.bss)
-    __temporary_stack_top$libspace           0x10000070   Data           0  libspace.o(.bss)
+    ms_coeff                                 0x1000000c   Data           4  main.o(.data)
+    sec_in_min                               0x10000010   Data           4  main.o(.data)
+    ms_in_min                                0x10000014   Data           4  main.o(.data)
+    min_to_run                               0x10000018   Data           4  main.o(.data)
+    magic_number                             0x1000001c   Data           4  main.o(.data)
+    __libspace_start                         0x10000020   Data          96  libspace.o(.bss)
+    __temporary_stack_top$libspace           0x10000080   Data           0  libspace.o(.bss)
 
 
 
@@ -533,9 +537,9 @@ Memory Map of the image
 
   Image Entry point : 0x000000cd
 
-  Load Region LR_IROM1 (Base: 0x00000000, Size: 0x00002924, Max: 0x00080000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x00000000, Size: 0x00002958, Max: 0x00080000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Base: 0x00000000, Size: 0x00002914, Max: 0x00080000, ABSOLUTE)
+    Execution Region ER_IROM1 (Base: 0x00000000, Size: 0x00002938, Max: 0x00080000, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -588,16 +592,10 @@ Memory Map of the image
     0x00000166   0x00000004   Code   RO          250    .ARM.Collect$$rtexit$$00000003  c_w.l(rtexit2.o)
     0x0000016a   0x00000006   Code   RO          251    .ARM.Collect$$rtexit$$00000004  c_w.l(rtexit2.o)
     0x00000170   0x0000003c   Code   RO            5    .text               startup_lpc17xx.o
-    0x000001ac   0x000000f4   Code   RO           99    .text               main.o
-    0x000002a0   0x00000028   Code   RO          131    .text               c_w.l(noretval__2sprintf.o)
-    0x000002c8   0x00000006   Code   RO          161    .text               c_w.l(heapauxi.o)
-    0x000002ce   0x0000000a   Code   RO          170    .text               c_w.l(_sputc.o)
-    0x000002d8   0x0000000c   Code   RO          192    .text               c_w.l(exit.o)
-    0x000002e4   0x00000008   Code   RO          200    .text               c_w.l(libspace.o)
-    0x000002ec   0x0000000c   Code   RO          259    .text               c_w.l(sys_exit.o)
-    0x000002f8   0x00000002   Code   RO          270    .text               c_w.l(use_no_semi.o)
-    0x000002fa   0x00000000   Code   RO          272    .text               c_w.l(indicate_semi.o)
-    0x000002fa   0x00000002   PAD
+    0x000001ac   0x00000118   Code   RO           99    .text               main.o
+    0x000002c4   0x00000028   Code   RO          131    .text               c_w.l(noretval__2sprintf.o)
+    0x000002ec   0x00000006   Code   RO          161    .text               c_w.l(heapauxi.o)
+    0x000002f2   0x0000000a   Code   RO          170    .text               c_w.l(_sputc.o)
     0x000002fc   0x00000004   Code   RO            4    .ARM.__at_0x02FC    startup_lpc17xx.o
     0x00000300   0x000007fc   Code   RO           15    .text               glcd_spi_lpc1700.o
     0x00000afc   0x0000021c   Code   RO           69    .text               system_lpc17xx.o
@@ -608,24 +606,30 @@ Memory Map of the image
     0x00000f20   0x000000b8   Code   RO          166    .text               c_w.l(_printf_intcommon.o)
     0x00000fd8   0x00000030   Code   RO          168    .text               c_w.l(_printf_char_common.o)
     0x00001008   0x0000004a   Code   RO          190    .text               c_w.l(sys_stackheap_outer.o)
-    0x00001052   0x0000000e   Code   RO          149    i._is_digit         c_w.l(__printf_wp.o)
-    0x00001060   0x00001880   Data   RO           16    .constdata          glcd_spi_lpc1700.o
-    0x000028e0   0x00000011   Data   RO          152    .constdata          c_w.l(__printf_flags_wp.o)
-    0x000028f1   0x00000003   PAD
-    0x000028f4   0x00000020   Data   RO          324    Region$$Table       anon$$obj.o
+    0x00001052   0x0000000c   Code   RO          192    .text               c_w.l(exit.o)
+    0x0000105e   0x00000002   PAD
+    0x00001060   0x00000008   Code   RO          200    .text               c_w.l(libspace.o)
+    0x00001068   0x0000000c   Code   RO          259    .text               c_w.l(sys_exit.o)
+    0x00001074   0x00000002   Code   RO          270    .text               c_w.l(use_no_semi.o)
+    0x00001076   0x00000000   Code   RO          272    .text               c_w.l(indicate_semi.o)
+    0x00001076   0x0000000e   Code   RO          149    i._is_digit         c_w.l(__printf_wp.o)
+    0x00001084   0x00001880   Data   RO           16    .constdata          glcd_spi_lpc1700.o
+    0x00002904   0x00000011   Data   RO          152    .constdata          c_w.l(__printf_flags_wp.o)
+    0x00002915   0x00000003   PAD
+    0x00002918   0x00000020   Data   RO          324    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Base: 0x10000000, Size: 0x00000270, Max: 0x00008000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Base: 0x10000000, Size: 0x00000280, Max: 0x00008000, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x10000000   0x00000006   Data   RW           17    .data               glcd_spi_lpc1700.o
     0x10000006   0x00000002   PAD
     0x10000008   0x00000004   Data   RW           70    .data               system_lpc17xx.o
-    0x1000000c   0x00000004   Data   RW          100    .data               main.o
-    0x10000010   0x00000060   Zero   RW          201    .bss                c_w.l(libspace.o)
-    0x10000070   0x00000000   Zero   RW            2    HEAP                startup_lpc17xx.o
-    0x10000070   0x00000200   Zero   RW            1    STACK               startup_lpc17xx.o
+    0x1000000c   0x00000014   Data   RW          100    .data               main.o
+    0x10000020   0x00000060   Zero   RW          201    .bss                c_w.l(libspace.o)
+    0x10000080   0x00000000   Zero   RW            2    HEAP                startup_lpc17xx.o
+    0x10000080   0x00000200   Zero   RW            1    STACK               startup_lpc17xx.o
 
 
 ==============================================================================
@@ -636,12 +640,12 @@ Image component sizes
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
       2044         58       6272          6          0      11892   glcd_spi_lpc1700.o
-       244         60          0          4          0        831   main.o
+       280         70          0         20          0       1004   main.o
         64         26        204          0        512        832   startup_lpc17xx.o
        540         64          0          4          0        615   system_lpc17xx.o
 
     ----------------------------------------------------------------------
-      2892        208       6508         16        512      14170   Object Totals
+      2928        218       6508         32        512      14343   Object Totals
          0          0         32          0          0          0   (incl. Generated)
          0          0          0          2          0          0   (incl. Padding)
 
@@ -701,15 +705,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      3988        260       6528         16        608      14558   Grand Totals
-      3988        260       6528         16        608      14558   ELF Image Totals
-      3988        260       6528         16          0          0   ROM Totals
+      4024        270       6528         32        608      14731   Grand Totals
+      4024        270       6528         32        608      14731   ELF Image Totals
+      4024        270       6528         32          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                10516 (  10.27kB)
-    Total RW  Size (RW Data + ZI Data)               624 (   0.61kB)
-    Total ROM Size (Code + RO Data + RW Data)      10532 (  10.29kB)
+    Total RO  Size (Code + RO Data)                10552 (  10.30kB)
+    Total RW  Size (RW Data + ZI Data)               640 (   0.63kB)
+    Total ROM Size (Code + RO Data + RW Data)      10584 (  10.34kB)
 
 ==============================================================================
 
