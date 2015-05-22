@@ -10,7 +10,7 @@ int timer_subroutine(uint32_t milliseconds) {
 	
     GLCD_DisplayString(1,1,1,"START");
     for(i=0; i<milliseconds; ++i) {
-			for(j=0; j<25000; ++j) {
+			for(j=0; j<17000; ++j) {
 				__nop();
       }
 				
@@ -31,7 +31,7 @@ int main(void) {
     GLCD_Init();
     GLCD_Clear(White);
     __disable_irq();
-    g_ms = 1000;
+    g_ms = 10000;
 		timer_subroutine(g_ms);
     return 0;
 }
