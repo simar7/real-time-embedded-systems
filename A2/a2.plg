@@ -1,0 +1,13 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+N:\ece455\A2\a2.uvproj
+Project File Date:  06/07/2015
+
+<h2>Output:</h2>
+Build target 'LPC1768_FLASH'
+linking...
+Program Size: Code=4094 RO-data=6526 RW-data=32 ZI-data=608  
+"a2.axf" - 0 Error(s), 0 Warning(s).
