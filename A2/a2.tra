@@ -14,7 +14,7 @@
 ### ADS-LD Output File: 'a2.axf'
 ### ADS-LD Command File: 'a2.lnp'
 ### Checking for dirty Components...
-### Creating CmdFile 'a2.lnp', Handle=0x0000057C
+### Creating CmdFile 'a2.lnp', Handle=0x0000070C
 ### Writing '.lnp' file
 ### ADS-LD Command file 'a2.lnp' is ready.
 ### ADS-LD: About to start ADS-LD Thread.

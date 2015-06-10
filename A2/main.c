@@ -76,6 +76,7 @@ void EINT3_IRQHandler()
 		// Start Timer
 	  LPC_TIM0->TCR = 0x02;
 		LPC_TIM0->TCR = 0x01;
+		LPC_TIM0->MR0 = 25000;
 		LPC_TIM0->PR  = 0x00; 
 	}
 	else if (int0_val == 1)		// Button is released
@@ -87,12 +88,12 @@ void EINT3_IRQHandler()
 
 	global_time = tim0_val;
 	
-	if (global_time >= 9999999 && int0_val == 1) {
+	if (global_time >= 999999 && int0_val == 1) {
 		persist_dash += 1;
-		global_button_input = 1;
-	} else if(global_time < 9999999 && int0_val == 0) {
+		//global_button_input = 1;
+	} else if(global_time < 999999 && int0_val == 0) {
 		persist_dot += 1;
-		global_button_input = 0;
+		//global_button_input = 0;
 	}
 	
 }
