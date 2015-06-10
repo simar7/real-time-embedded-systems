@@ -2,6 +2,7 @@
 #include "glcd.h"
 #include <stdio.h>
 
+uint32_t g_ms = 0;
 uint32_t ms_coeff = 1000;
 uint32_t sec_in_min = 60;
 uint32_t ms_in_min = 60000;
@@ -48,7 +49,7 @@ void init_system()
 	GLCD_Clear(White);
 }
 
-void init_int0()
+void init_intr()
 {
 	// Set INT0 as input
 	LPC_PINCON->PINSEL4 &= ~(3<<20);		// P2.10 is GPIO
@@ -57,8 +58,19 @@ void init_int0()
 	LPC_GPIOINT->IO2IntEnF |= 1 << 10; // falling edge of P2.10		BUTTON IS PRESSED
 	LPC_GPIOINT->IO2IntEnR |= 1 << 10; // rising edge of P2.10	BUTTON IS RELEASED
 	NVIC_EnableIRQ(EINT3_IRQn);
+	
+	LPC_TIM1->TCR = 0x02;	// reset timer
+	LPC_TIM1->TCR = 0x01; // enable timer
+	LPC_TIM1->MR0 = 2048; // match register TODO: Check what value works.
+	LPC_TIM1->MCR |= 0x03; // on match, generate interrupt and reset
+	NVIC_EnableIRQ(TIMER1_IRQn); // enable timer interrupts
+	
 }
 
+void TIMER1_IRQHandler() {
+		LPC_TIM1->IR |= 0x01;	// clear the interrupt.
+		g_ms++;
+}
 
 void EINT3_IRQHandler()
 {
@@ -120,7 +132,7 @@ int main (void)
 	event_t current_event;
 	
 	init_system();
-	init_int0();
+	init_intr();
 	
 	while (!pattern_match)
 	{
