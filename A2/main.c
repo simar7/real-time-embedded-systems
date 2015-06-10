@@ -61,7 +61,7 @@ void init_intr()
 	
 	LPC_GPIOINT->IO2IntEnF |= 1 << 10; // falling edge of P2.10		BUTTON IS PRESSED
 	LPC_GPIOINT->IO2IntEnR |= 1 << 10; // rising edge of P2.10	BUTTON IS RELEASED
-	NVIC_EnableIRQ(EINT3_IRQn);
+	//NVIC_EnableIRQ(EINT3_IRQn);
 	
 	LPC_TIM1->TCR = 0x02;	// reset timer
 	LPC_TIM1->TCR = 0x01; // enable timer
@@ -74,6 +74,8 @@ void init_intr()
 void TIMER1_IRQHandler() {
 		LPC_TIM1->IR |= 0x01;	// clear the interrupt.
 
+		global_button_input =~ (LPC_GPIO2->FIOPIN >> 10) & 0x01;
+	
 		if(global_button_input == 0) {
 				if(Key_Hit != 0) {
 					Key_Hit--;
@@ -124,23 +126,8 @@ void EINT3_IRQHandler()
 	}
 
 	global_time = tim0_val;
-	global_button_input = int0_val;
+	//global_button_input = int0_val;
 	
-}
-
-void checkIfDotOrDash() {
-	if (persist_dash == MAX_PERSIST) {		// DASH
-		global_button_input = 1;
-		prev_button_val = global_button_input;
-		persist_dash = 0;
-	} else if(persist_dot == MAX_PERSIST) {			// DOT
-		global_button_input = 0;
-		prev_button_val = global_button_input;
-		persist_dot = 0;
-	}
-	else {
-		global_button_input = prev_button_val;
-	}
 }
 
 int main (void)
