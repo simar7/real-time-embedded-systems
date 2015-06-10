@@ -2,86 +2,159 @@
 #include "glcd.h"
 #include <stdio.h>
 
-uint32_t g_ms;
 uint32_t ms_coeff = 1000;
 uint32_t sec_in_min = 60;
 uint32_t ms_in_min = 60000;
 uint32_t min_to_run = 10;
+uint32_t magic_number = 16550;
+uint32_t i = 0;
+uint32_t j = 1;
+uint32_t milliseconds = 100;
 
-// States
-#define S0 	0		// START
-#define S1	1
-#define S2	2
-#define S3	3
-#define S4	4
-#define S5	5
-#define S6	6
-#define S7	7		// COMPLETE
+char curr_state[16];
+volatile int input;
+volatile uint32_t global_time;
+volatile char counter[64];
+int TS = 3000000;
+int timeSpike = 10000;
+volatile int persist_dot = 1;
+volatile int persist_dash = 1;
+volatile int prev_button_val = 0;
+volatile int global_button_input = 0;
 
-// Events
-#define DOT 0
-#define DASH 1
+#define MAX_PERSIST 3
+#define TOTAL_STATES 8
+#define TOTAL_EVENTS 2
 
-// Transition Table
-// t_table[event][curstate]
-int t_table[][] = {
-	// S0		S1		S2		S3		S4		S5		S6
-	{ S1, S0, S1, S4, S1, S6, S7},	// DOT
-	{ S0, S2, S3, S0, S5, S3, S2},	// DASH
+typedef enum { S0, S1, S2, S3, S4, S5, S6, S7 } state_t;
+typedef enum { DOT, DASH } event_t;
+	
+state_t transition_matrix[TOTAL_STATES][TOTAL_EVENTS] = {
+	{S1, S0},	// S0
+	{S0, S2}, // S1
+	{S1, S3}, // S2
+	{S4, S0}, // S3
+	{S1, S5}, // S4
+	{S6, S3}, // S5
+	{S7, S2}, // S6
+	{S7, S7}  // S7
 };
 
-// State Machine
-enum FSMSTATE = { 
-S0, S1, S2, S3, S4, S5, S6, S7
-} curr_state;
-
-// Initial State
-curr_state = S0;
-
-struct FSM {
-	FSMSTATE curr_state;
-	int nextState = S0;
+void init_system()
+{
+	// Initialize system and GLCD
+	SystemInit();
+	GLCD_Init();
+	GLCD_Clear(White);
 }
 
-void BoardInit() {
-	g_ms = 0;
-	LPC_TIM0->TCR = 0x02;	// reset timer
-	LPC_TIM0->TCR = 0x01; // enable timer
-	LPC_TIM0->MR0 = 25000; // match value (10 minute mark)
-	LPC_TIM0->MCR |= 0x03; // on match, generate interrupt and reset
-	NVIC_EnableIRQ(TIMER0_IRQn); // enable timer interrupts
+void init_int0()
+{
+	// Set INT0 as input
+	LPC_PINCON->PINSEL4 &= ~(3<<20);		// P2.10 is GPIO
+	LPC_GPIO2->FIODIR		&= ~(1<<1);		// P2.10 is input
+	
+	LPC_GPIOINT->IO2IntEnF |= 1 << 10; // falling edge of P2.10		BUTTON IS PRESSED
+	LPC_GPIOINT->IO2IntEnR |= 1 << 10; // rising edge of P2.10	BUTTON IS RELEASED
+	NVIC_EnableIRQ(EINT3_IRQn);
 }
 
-void hwInterrupt(uint32_t milliseconds) {
-	char cur_time[128];
 
-	while (g_ms <= milliseconds+ms_coeff) {
-		sprintf(cur_time, "%02d:%02d", ((g_ms)/ms_in_min),((g_ms)/ms_coeff)%sec_in_min);
-		GLCD_DisplayString(5, 5, 1, (unsigned char *)cur_time);
+void EINT3_IRQHandler()
+{
+	int int0_val;
+	volatile int tim0_val;
+	
+	// Clear the interrupt on EINT0
+	LPC_GPIOINT->IO2IntClr |= 1 << 10;
+	
+	int0_val =~ (LPC_GPIO2->FIOPIN >> 10) & 0x01;
+	//tim0_val = LPC_TIM0->TC;
+
+	if (int0_val == 0)		// Button is pressed
+	{
+		// Start Timer
+	  LPC_TIM0->TCR = 0x02;
+		LPC_TIM0->TCR = 0x01;
+		LPC_TIM0->PR  = 0x00; 
+	}
+	else if (int0_val == 1)		// Button is released
+	{
+		tim0_val = LPC_TIM0->TC;
+		// Stop Timer
+		LPC_TIM0->TCR = 0x02;
+	}
+
+	global_time = tim0_val;
+	
+	if (global_time >= 9999999 && int0_val == 1) {
+		persist_dash += 1;
+		global_button_input = 1;
+	} else if(global_time < 9999999 && int0_val == 0) {
+		persist_dot += 1;
+		global_button_input = 0;
+	}
+	
+}
+
+void checkIfDotOrDash() {
+	if (persist_dash == MAX_PERSIST) {		// DASH
+		global_button_input = 1;
+		prev_button_val = global_button_input;
+		persist_dash = 0;
+	} else if(persist_dot == MAX_PERSIST) {												// DOT
+		global_button_input = 0;
+		prev_button_val = global_button_input;
+		persist_dot = 0;
+	}
+	else {
+		global_button_input = prev_button_val;
 	}
 }
 
-void TIMER0_IRQHandler() {
-		LPC_TIM0->IR |= 0x01;	// clear the interrupt.
-		//GLCD_DisplayString(9, 1, 1, "Interrupt hit")
-		g_ms++;
-}
-
-
-int main(void) {
-    SystemInit();
-    GLCD_Init();
-    GLCD_Clear(Black);
-		GLCD_SetTextColor(Red);
-		GLCD_SetBackColor(Black);
-		__enable_irq();
+int main (void)
+{
+	int pattern_match = 0;
+	state_t current_state = S0;
+	event_t current_event;
 	
-		GLCD_DisplayString(1, 1, 1, "INPUT: ");
-		GLCD_DisplayString(1, 9, 1, "DOT");
-		GLCD_DisplayString(4, 5, 1, "TIMER");
-		BoardInit();
+	init_system();
+	init_int0();
 	
-		hwInterrupt(min_to_run * ms_in_min);
-		GLCD_DisplayString(1, 9, 1, "END  ");
-    return 0;
+	while (!pattern_match)
+	{
+		GLCD_DisplayString(7,1,1,"STATUS: RUNNING");
+
+		checkIfDotOrDash();
+		
+			if (global_button_input == 0) {
+				current_event = DOT;
+				GLCD_DisplayString(3,1,1,"INPUT:  DOT");
+			}
+			else if (global_button_input == 1) {
+				current_event = DASH;
+				GLCD_DisplayString(3,1,1,"INPUT: DASH");
+			}
+		
+			if(persist_dash == MAX_PERSIST || persist_dot == MAX_PERSIST) {
+				if(global_button_input == 1) {
+					GLCD_DisplayString(3,1,1,"INPUT: DASH");
+					persist_dash = 0;
+				}
+				else {
+					GLCD_DisplayString(3,1,1,"INPUT:  DOT");
+					persist_dot = 0;
+				}
+				current_state = transition_matrix[current_state][current_event];
+			}
+			
+			sprintf(curr_state, "%02d", current_state);
+			GLCD_DisplayString(1, 1, 1, (unsigned char *)curr_state);
+			
+			if (current_state == S7) { 
+				pattern_match = 1;
+				GLCD_Clear(White);
+				GLCD_DisplayString(7,1,1,"STATUS: COMPLETE");
+			}
+	}
 }
