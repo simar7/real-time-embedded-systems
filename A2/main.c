@@ -22,10 +22,14 @@ volatile int persist_dot = 1;
 volatile int persist_dash = 1;
 volatile int prev_button_val = 0;
 volatile int global_button_input = 0;
+unsigned char Key_Hit;
+unsigned char Long_Key_Hit;
 
 #define MAX_PERSIST 3
 #define TOTAL_STATES 8
 #define TOTAL_EVENTS 2
+// #define BUTTON int0_val =~ (LPC_GPIO2->FIOPIN >> 10) & 0x01
+volatile unsigned char Div18Counter = 0;
 
 typedef enum { S0, S1, S2, S3, S4, S5, S6, S7 } state_t;
 typedef enum { DOT, DASH } event_t;
@@ -69,8 +73,29 @@ void init_intr()
 
 void TIMER1_IRQHandler() {
 		LPC_TIM1->IR |= 0x01;	// clear the interrupt.
-		g_ms++;
+
+		if(global_button_input == 0) {
+				if(Key_Hit != 0) {
+					Key_Hit--;
+				}
+		}
+		else {
+			if(Key_Hit != 0xff) {
+					Key_Hit++;
+			}
+		}
+
+		if(++Div18Counter >= 18) {
+			Div18Counter = 0;
+			if(Key_Hit == 0xff) {
+				if(Long_Key_Hit != 0xff)
+					Long_Key_Hit++;
+			}
+			else if(Key_Hit == 0x00)
+				Long_Key_Hit = 0x00;
+		}
 }
+
 
 void EINT3_IRQHandler()
 {
@@ -99,14 +124,7 @@ void EINT3_IRQHandler()
 	}
 
 	global_time = tim0_val;
-	
-	if (global_time >= 999999 && int0_val == 1) {
-		persist_dash += 1;
-		//global_button_input = 1;
-	} else if(global_time < 999999 && int0_val == 0) {
-		persist_dot += 1;
-		//global_button_input = 0;
-	}
+	global_button_input = int0_val;
 	
 }
 
@@ -115,7 +133,7 @@ void checkIfDotOrDash() {
 		global_button_input = 1;
 		prev_button_val = global_button_input;
 		persist_dash = 0;
-	} else if(persist_dot == MAX_PERSIST) {												// DOT
+	} else if(persist_dot == MAX_PERSIST) {			// DOT
 		global_button_input = 0;
 		prev_button_val = global_button_input;
 		persist_dot = 0;
@@ -138,31 +156,26 @@ int main (void)
 	{
 		GLCD_DisplayString(7,1,1,"STATUS: RUNNING");
 
-		checkIfDotOrDash();
+		//checkIfDotOrDash();
 		
-			if (global_button_input == 0) {
+			if (Key_Hit == 0xff) {
 				current_event = DOT;
 				GLCD_DisplayString(3,1,1,"INPUT:  DOT");
+				current_state = transition_matrix[current_state][current_event];
+				sprintf(curr_state, "%02d", current_state);
+				GLCD_DisplayString(1, 1, 1, (unsigned char *)curr_state);
 			}
-			else if (global_button_input == 1) {
+			else if (Key_Hit == 0x00) {
+				// Release
+			}
+			else if (Long_Key_Hit == 0xff) {
 				current_event = DASH;
 				GLCD_DisplayString(3,1,1,"INPUT: DASH");
+				current_state = transition_matrix[current_state][current_event];
+				sprintf(curr_state, "%02d", current_state);
+				GLCD_DisplayString(1, 1, 1, (unsigned char *)curr_state);
 			}
 		
-			if(persist_dash == MAX_PERSIST || persist_dot == MAX_PERSIST) {
-				if(global_button_input == 1) {
-					GLCD_DisplayString(3,1,1,"INPUT: DASH");
-					persist_dash = 0;
-				}
-				else {
-					GLCD_DisplayString(3,1,1,"INPUT:  DOT");
-					persist_dot = 0;
-				}
-				current_state = transition_matrix[current_state][current_event];
-			}
-			
-			sprintf(curr_state, "%02d", current_state);
-			GLCD_DisplayString(1, 1, 1, (unsigned char *)curr_state);
 			
 			if (current_state == S7) { 
 				pattern_match = 1;
