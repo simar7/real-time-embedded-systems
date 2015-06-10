@@ -65,7 +65,7 @@ void init_intr()
 	
 	LPC_TIM1->TCR = 0x02;	// reset timer
 	LPC_TIM1->TCR = 0x01; // enable timer
-	LPC_TIM1->MR0 = 2048; // match register TODO: Check what value works.
+	LPC_TIM1->MR0 = 4096; // match register TODO: Check what value works.
 	LPC_TIM1->MCR |= 0x03; // on match, generate interrupt and reset
 	NVIC_EnableIRQ(TIMER1_IRQn); // enable timer interrupts
 	
