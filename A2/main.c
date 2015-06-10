@@ -28,7 +28,7 @@ unsigned char Long_Key_Hit;
 #define MAX_PERSIST 3
 #define TOTAL_STATES 8
 #define TOTAL_EVENTS 2
-// #define BUTTON int0_val =~ (LPC_GPIO2->FIOPIN >> 10) & 0x01
+//#define BUTTON ~(LPC_GPIO2->FIOPIN >> 10) & 0x01
 volatile unsigned char Div18Counter = 0;
 
 typedef enum { S0, S1, S2, S3, S4, S5, S6, S7 } state_t;
@@ -85,7 +85,7 @@ void TIMER1_IRQHandler() {
 			}
 		}
 
-		if(++Div18Counter >= 18) {
+		if(++Div18Counter >= 5) {
 			Div18Counter = 0;
 			if(Key_Hit == 0xff) {
 				if(Long_Key_Hit != 0xff)
@@ -108,15 +108,15 @@ void EINT3_IRQHandler()
 	int0_val =~ (LPC_GPIO2->FIOPIN >> 10) & 0x01;
 	//tim0_val = LPC_TIM0->TC;
 
-	if (int0_val == 0)		// Button is pressed
+	if (int0_val == 1)		// Button is pressed
 	{
 		// Start Timer
 	  LPC_TIM0->TCR = 0x02;
 		LPC_TIM0->TCR = 0x01;
-		LPC_TIM0->MR0 = 25000;
+		//LPC_TIM0->MR0 = 25000;
 		LPC_TIM0->PR  = 0x00; 
 	}
-	else if (int0_val == 1)		// Button is released
+	else if (int0_val == 0)		// Button is released
 	{
 		tim0_val = LPC_TIM0->TC;
 		// Stop Timer
@@ -161,8 +161,8 @@ int main (void)
 			if (Key_Hit == 0xff) {
 				current_event = DOT;
 				GLCD_DisplayString(3,1,1,"INPUT:  DOT");
-				current_state = transition_matrix[current_state][current_event];
 				sprintf(curr_state, "%02d", current_state);
+				current_state = transition_matrix[current_state][current_event];
 				GLCD_DisplayString(1, 1, 1, (unsigned char *)curr_state);
 			}
 			else if (Key_Hit == 0x00) {
@@ -176,6 +176,7 @@ int main (void)
 				GLCD_DisplayString(1, 1, 1, (unsigned char *)curr_state);
 			}
 		
+			
 			
 			if (current_state == S7) { 
 				pattern_match = 1;
