@@ -406,3 +406,62 @@ Load "N:\\ECE455-new\\ece455\\A3\\a3.AXF"
 Erase Done.
 Programming Done.
 Verify OK.
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: Code=4178 RO-data=6526 RW-data=56 ZI-data=688  
+"a3.axf" - 0 Error(s), 0 Warning(s).
+Load "N:\\ECE455-new\\ece455\\A3\\a3.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Target 1'
+compiling main.c...
+main.c(59): error:  #254: type name is not allowed
+main.c(59): error:  #18: expected a ")"
+Target not created
+Build target 'Target 1'
+compiling main.c...
+main.c(59): error:  #20: identifier "IRQ3_Type" is undefined
+main.c(59): error:  #18: expected a ")"
+Target not created
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: Code=4186 RO-data=6526 RW-data=56 ZI-data=688  
+"a3.axf" - 0 Error(s), 0 Warning(s).
+Load "N:\\ECE455-new\\ece455\\A3\\a3.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: Code=4166 RO-data=6526 RW-data=56 ZI-data=688  
+"a3.axf" - 0 Error(s), 0 Warning(s).
+Load "N:\\ECE455-new\\ece455\\A3\\a3.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: Code=4186 RO-data=6526 RW-data=56 ZI-data=688  
+"a3.axf" - 0 Error(s), 0 Warning(s).
+Load "N:\\ECE455-new\\ece455\\A3\\a3.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Target 1'
+compiling main.c...
+main.c(111): error:  #20: identifier "cur_time" is undefined
+Target not created
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: Code=4342 RO-data=6526 RW-data=56 ZI-data=816  
+"a3.axf" - 0 Error(s), 0 Warning(s).
+Load "N:\\ECE455-new\\ece455\\A3\\a3.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.

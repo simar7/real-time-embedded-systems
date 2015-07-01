@@ -1,22 +1,22 @@
-*** Creating Trace Output File 'a2.tra' Ok.
+*** Creating Trace Output File 'a3.tra' Ok.
 ### Preparing for ADS-LD.
 ### Creating ADS-LD Command Line
 ### List of Objects: adding '"startup_lpc17xx.o"'
 ### List of Objects: adding '"glcd_spi_lpc1700.o"'
-### List of Objects: adding '"system_lpc17xx.o"'
 ### List of Objects: adding '"main.o"'
+### List of Objects: adding '"system_lpc17xx.o"'
 ### ADS-LD Command completed:
---cpu Cortex-M3 "startup_lpc17xx.o" "glcd_spi_lpc1700.o" "system_lpc17xx.o" "main.o" 
---strict --scatter "a2.sct" 
+--cpu Cortex-M3 "startup_lpc17xx.o" "glcd_spi_lpc1700.o" "main.o" "system_lpc17xx.o" 
+--strict --scatter "a3.sct" 
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols 
 --info sizes --info totals --info unused --info veneers 
- --list ".\a2.map" -o a2.axf### Preparing Environment (PrepEnvAds)
-### ADS-LD Output File: 'a2.axf'
-### ADS-LD Command File: 'a2.lnp'
+ --list ".\a3.map" -o a3.axf### Preparing Environment (PrepEnvAds)
+### ADS-LD Output File: 'a3.axf'
+### ADS-LD Command File: 'a3.lnp'
 ### Checking for dirty Components...
-### Creating CmdFile 'a2.lnp', Handle=0x0000050C
+### Creating CmdFile 'a3.lnp', Handle=0x00000720
 ### Writing '.lnp' file
-### ADS-LD Command file 'a2.lnp' is ready.
+### ADS-LD Command file 'a3.lnp' is ready.
 ### ADS-LD: About to start ADS-LD Thread.
 ### ADS-LD: executed with 0 errors
 ### Updating obj list

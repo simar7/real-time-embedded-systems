@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>LPC1768_FLASH</TargetName>
+      <TargetName>Target 1</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
@@ -44,7 +44,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\</OutputDirectory>
-          <OutputName>a2</OutputName>
+          <OutputName>a3</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
@@ -395,36 +395,6 @@
               <FileName>startup_LPC17xx.s</FileName>
               <FileType>2</FileType>
               <FilePath>.\startup_LPC17xx.s</FilePath>
-            </File>
-            <File>
-              <FileName>GLCD_SPI_LPC1700.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\GLCD_SPI_LPC1700.c</FilePath>
-            </File>
-            <File>
-              <FileName>system_LPC17xx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\system_LPC17xx.c</FilePath>
-            </File>
-            <File>
-              <FileName>Font_6x8_h.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Font_6x8_h.h</FilePath>
-            </File>
-            <File>
-              <FileName>Font_16x24_h.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Font_16x24_h.h</FilePath>
-            </File>
-            <File>
-              <FileName>GLCD.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\GLCD.h</FilePath>
-            </File>
-            <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\main.c</FilePath>
             </File>
           </Files>
         </Group>

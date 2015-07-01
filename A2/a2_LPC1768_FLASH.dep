@@ -1,31 +1,31 @@
 Dependencies for Project 'a2', Target 'LPC1768_FLASH': (DO NOT MODIFY !)
-F (.\startup_LPC17xx.s)(0x4F58EC96)(--cpu Cortex-M3 -g --apcs=interwork -I C:\Software\Keil\ARM\RV31\INC -I C:\Software\Keil\ARM\CMSIS\Include -I C:\Software\Keil\ARM\Inc\NXP\LPC17xx --list "startup_LPC17xx.lst" --xref -o "startup_LPC17xx.o" --depend "startup_LPC17xx.d")
-F (.\GLCD_SPI_LPC1700.c)(0x4CA4F00E)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I C:\Software\Keil\ARM\RV31\INC -I C:\Software\Keil\ARM\CMSIS\Include -I C:\Software\Keil\ARM\Inc\NXP\LPC17xx -o "glcd_spi_lpc1700.o" --omf_browse "glcd_spi_lpc1700.crf" --depend "glcd_spi_lpc1700.d")
+F (.\startup_LPC17xx.s)(0x5578B50D)(--cpu Cortex-M3 -g --apcs=interwork -I C:\Software\Keil\ARM\RV31\INC -I C:\Software\Keil\ARM\CMSIS\Include -I C:\Software\Keil\ARM\Inc\NXP\LPC17xx --list "startup_LPC17xx.lst" --xref -o "startup_LPC17xx.o" --depend "startup_LPC17xx.d")
+F (.\GLCD_SPI_LPC1700.c)(0x5578B50D)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I C:\Software\Keil\ARM\RV31\INC -I C:\Software\Keil\ARM\CMSIS\Include -I C:\Software\Keil\ARM\Inc\NXP\LPC17xx -o "glcd_spi_lpc1700.o" --omf_browse "glcd_spi_lpc1700.crf" --depend "glcd_spi_lpc1700.d")
 I (C:\Software\Keil\ARM\Inc\NXP\LPC17xx\lpc17xx.h)(0x4FF5A98C)
 I (C:\Software\Keil\ARM\CMSIS\Include\core_cm3.h)(0x5006D242)
 I (C:\Software\Keil\ARM\ARMCC\bin\..\include\stdint.h)(0x4EB17B44)
 I (C:\Software\Keil\ARM\CMSIS\Include\core_cmInstr.h)(0x505A054C)
 I (C:\Software\Keil\ARM\CMSIS\Include\core_cmFunc.h)(0x4FDB3D1C)
 I (C:\Software\Keil\ARM\Inc\NXP\LPC17xx\system_LPC17xx.h)(0x4F58EE42)
-I (GLCD.h)(0x4CA4F00E)
-I (Font_6x8_h.h)(0x4CADFBE8)
-I (Font_16x24_h.h)(0x4CA4F00E)
-F (.\system_LPC17xx.c)(0x4C816738)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I C:\Software\Keil\ARM\RV31\INC -I C:\Software\Keil\ARM\CMSIS\Include -I C:\Software\Keil\ARM\Inc\NXP\LPC17xx -o "system_lpc17xx.o" --omf_browse "system_lpc17xx.crf" --depend "system_lpc17xx.d")
+I (GLCD.h)(0x5578B50D)
+I (Font_6x8_h.h)(0x5578B50D)
+I (Font_16x24_h.h)(0x5578B50D)
+F (.\system_LPC17xx.c)(0x5578B50D)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I C:\Software\Keil\ARM\RV31\INC -I C:\Software\Keil\ARM\CMSIS\Include -I C:\Software\Keil\ARM\Inc\NXP\LPC17xx -o "system_lpc17xx.o" --omf_browse "system_lpc17xx.crf" --depend "system_lpc17xx.d")
 I (C:\Software\Keil\ARM\ARMCC\bin\..\include\stdint.h)(0x4EB17B44)
 I (C:\Software\Keil\ARM\Inc\NXP\LPC17xx\LPC17xx.h)(0x4FF5A98C)
 I (C:\Software\Keil\ARM\CMSIS\Include\core_cm3.h)(0x5006D242)
 I (C:\Software\Keil\ARM\CMSIS\Include\core_cmInstr.h)(0x505A054C)
 I (C:\Software\Keil\ARM\CMSIS\Include\core_cmFunc.h)(0x4FDB3D1C)
 I (C:\Software\Keil\ARM\Inc\NXP\LPC17xx\system_LPC17xx.h)(0x4F58EE42)
-F (.\Font_6x8_h.h)(0x4CADFBE8)()
-F (.\Font_16x24_h.h)(0x4CA4F00E)()
-F (.\GLCD.h)(0x4CA4F00E)()
-F (.\main.c)(0x55779366)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I C:\Software\Keil\ARM\RV31\INC -I C:\Software\Keil\ARM\CMSIS\Include -I C:\Software\Keil\ARM\Inc\NXP\LPC17xx -o "main.o" --omf_browse "main.crf" --depend "main.d")
+F (.\Font_6x8_h.h)(0x5578B50D)()
+F (.\Font_16x24_h.h)(0x5578B50D)()
+F (.\GLCD.h)(0x5578B50D)()
+F (.\main.c)(0x5578D546)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I C:\Software\Keil\ARM\RV31\INC -I C:\Software\Keil\ARM\CMSIS\Include -I C:\Software\Keil\ARM\Inc\NXP\LPC17xx -o "main.o" --omf_browse "main.crf" --depend "main.d")
 I (C:\Software\Keil\ARM\Inc\NXP\LPC17xx\lpc17xx.h)(0x4FF5A98C)
 I (C:\Software\Keil\ARM\CMSIS\Include\core_cm3.h)(0x5006D242)
 I (C:\Software\Keil\ARM\ARMCC\bin\..\include\stdint.h)(0x4EB17B44)
 I (C:\Software\Keil\ARM\CMSIS\Include\core_cmInstr.h)(0x505A054C)
 I (C:\Software\Keil\ARM\CMSIS\Include\core_cmFunc.h)(0x4FDB3D1C)
 I (C:\Software\Keil\ARM\Inc\NXP\LPC17xx\system_LPC17xx.h)(0x4F58EE42)
-I (glcd.h)(0x4CA4F00E)
+I (glcd.h)(0x5578B50D)
 I (C:\Software\Keil\ARM\ARMCC\bin\..\include\stdio.h)(0x4EB17B46)
