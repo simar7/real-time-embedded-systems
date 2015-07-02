@@ -86,9 +86,6 @@ void EINT3_IRQHandler()
 
 	button_press_count = button_press_count + 1;
 	
-	// Turn off the LED
-	LPC_GPIO1->FIOSET = 0 << LED_PIN;
-	
 	NVIC_DisableIRQ(EINT3_IRQn);
 }
 
@@ -108,10 +105,11 @@ int main (void)
 			sprintf(curr_count, "%02d", button_press_count);
 			GLCD_DisplayString(1, 8, 1, (unsigned char *)curr_count);
 					
+			GLCD_DisplayString(3,1,1,"LOGIC: STRICT");
 			sprintf(cur_time, "%02d:%02d", ((g_ms)/ms_in_min),((g_ms)/ms_coeff)%sec_in_min);
 			GLCD_DisplayString(5, 5, 1, (unsigned char *)cur_time);
 			
 			// Turn off the LED
-			LPC_GPIO1->FIOSET = 0 << 28;
+			LPC_GPIO1->FIOCLR = 1 << LED_PIN;
 	}
 }
