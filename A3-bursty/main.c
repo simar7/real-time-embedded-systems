@@ -116,15 +116,15 @@ int main (void)
 	init_system();
 	init_intr();
 
-	GLCD_DisplayString(1, 1, 1, "COUNT: ");
+	GLCD_DisplayString(1, 1, 1, "PRESS COUNT: ");
 	sprintf(curr_count, "%02d", 0);
-	GLCD_DisplayString(1, 8, 1, (unsigned char *)curr_count);
+	GLCD_DisplayString(1, 14, 1, (unsigned char *)curr_count);
 	
 	while (1)
 	{
 			GLCD_DisplayString(7,1,1,"STATUS: RUNNING");
 			sprintf(curr_count, "%02d", button_press_count);
-			GLCD_DisplayString(1, 8, 1, (unsigned char *)curr_count);
+			GLCD_DisplayString(1, 14, 1, (unsigned char *)curr_count);
 					
 		  GLCD_DisplayString(3,1,1,"LOGIC: BURSTY ;)");
 			sprintf(cur_time, "%02d:%02d", ((g_ms)/ms_in_min),((g_ms)/ms_coeff)%sec_in_min);
