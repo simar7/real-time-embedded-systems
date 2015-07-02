@@ -6,6 +6,7 @@
 #define TEN_SEC  25000 * 1000 * 10
 #define LED_PIN 28
 #define BURST_SIZE 3
+#define TS 9999999
 
 uint32_t g_ms;
 uint32_t ms_coeff = 1000;
@@ -41,7 +42,7 @@ void init_intr()
 	LPC_GPIO2->FIODIR		&= ~(1<<1);		// P2.10 is input
 	
 	LPC_GPIOINT->IO2IntEnF |= 1 << 10; // falling edge of P2.10		BUTTON IS PRESSED
-	//LPC_GPIOINT->IO2IntEnR |= 1 << 10; // rising edge of P2.10	BUTTON IS RELEASED
+	LPC_GPIOINT->IO2IntEnR |= 1 << 10; // rising edge of P2.10	BUTTON IS RELEASED
 	NVIC_EnableIRQ(EINT3_IRQn);
 	
 	// Interrupt scheduler timer
@@ -84,17 +85,30 @@ void EINT3_IRQHandler()
 	// Clear the interrupt on EINT0
 	LPC_GPIOINT->IO2IntClr |= 1 << 10;
 
-	// Turn on the LED
-	LPC_GPIO1->FIOSET = 1 << LED_PIN;
+	int0_val =~ (LPC_GPIO2->FIOPIN >> 10) & 0x01;
 
-	button_press_count = button_press_count + 1;
-	burst_current_load = burst_current_load + 1;
-	
-	// Turn off the LED
-	LPC_GPIO1->FIOSET = 0 << LED_PIN;
+	if (int0_val == 1)		// Button is pressed
+	{
+		// Start Timer
+		global_time = 0;
+		LPC_TIM0->TCR = 0x01;
+		LPC_TIM0->PR  = 0x00; 
+			
+		button_press_count = button_press_count + 1;
+		burst_current_load = burst_current_load + 1;
+			
+		// Turn on the LED
+		LPC_GPIO1->FIOSET = 1 << LED_PIN;
+	}
+	else if (int0_val == 0)		// Button is released
+	{
+		tim0_val = LPC_TIM0->TC;
+		global_time = tim0_val;
+	}
 	
 	if (burst_current_load > 2)
 		NVIC_DisableIRQ(EINT3_IRQn);
+	
 }
 
 int main (void)
@@ -102,7 +116,6 @@ int main (void)
 	init_system();
 	init_intr();
 
-	
 	GLCD_DisplayString(1, 1, 1, "COUNT: ");
 	sprintf(curr_count, "%02d", 0);
 	GLCD_DisplayString(1, 8, 1, (unsigned char *)curr_count);
@@ -115,8 +128,8 @@ int main (void)
 					
 			sprintf(cur_time, "%02d:%02d", ((g_ms)/ms_in_min),((g_ms)/ms_coeff)%sec_in_min);
 			GLCD_DisplayString(5, 5, 1, (unsigned char *)cur_time);
-			
+
 			// Turn off the LED
-			LPC_GPIO1->FIOSET = 0 << 28;
+			LPC_GPIO1->FIOCLR = 1 << LED_PIN;
 	}
 }
