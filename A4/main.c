@@ -64,18 +64,6 @@
     the SafeRTOS brand: http://www.SafeRTOS.com.
 */
 
-/*
- * This is a very simple demo that demonstrates task and queue usages only in
- * a simple and minimal FreeRTOS configuration.  Details of other FreeRTOS 
- * features (API functions, tracing features, diagnostic hook functions, memory
- * management, etc.) can be found on the FreeRTOS web site 
- * (http://www.FreeRTOS.org) and in the FreeRTOS book.
- *
- * Details of this demo (what it does, how it should behave, etc.) can be found
- * in the accompanying PDF application note.
- *
-*/
-
 /* Kernel includes. */
 #include "FreeRTOS.h"
 #include "task.h"
@@ -84,9 +72,17 @@
 /* Standard include. */
 #include <stdio.h>
 
+/* API Includes */
+#define INCLUDE_vTaskDelayUntil 1
+#define INCLUDE_vTaskDelay 			1
+
+/* Global Constants */
+#define MSEC_IN_SEC 1000
+
 /* Priorities at which the tasks are created. */
-#define mainQUEUE_RECEIVE_TASK_PRIORITY		( tskIDLE_PRIORITY + 2 )
-#define	mainQUEUE_SEND_TASK_PRIORITY		( tskIDLE_PRIORITY + 1 )
+#define mainQUEUE_A_TASK_PRIORITY		( tskIDLE_PRIORITY + 3 )
+#define	mainQUEUE_B_TASK_PRIORITY		( tskIDLE_PRIORITY + 2 )
+#define	mainQUEUE_C_TASK_PRIORITY		( tskIDLE_PRIORITY + 1 )
 
 /* The rate at which data is sent to the queue, specified in milliseconds. */
 #define mainQUEUE_SEND_FREQUENCY_MS			( 10 / portTICK_RATE_MS )
@@ -108,8 +104,9 @@ the Keil simulator IDE. */
 /*
  * The tasks as described in the accompanying PDF application note.
  */
-static void prvQueueReceiveTask( void *pvParameters );
-static void prvQueueSendTask( void *pvParameters );
+static void prvTaskA( void *pvParameters );
+static void prvTaskB( void *pvParameters );
+static void prvTaskC( void *pvParameters );
 
 /*
  * Redirects the printf() output to the serial window in the Keil simulator
@@ -118,10 +115,6 @@ static void prvQueueSendTask( void *pvParameters );
 int fputc( int iChar, FILE *pxNotUsed );
 
 /*-----------------------------------------------------------*/
-
-/* The queue used by both tasks. */
-static xQueueHandle xQueue = NULL;
-
 /* One array position is used for each task created by this demo.  The 
 variables in this array are set and cleared by the trace macros within
 FreeRTOS, and displayed on the logic analyzer window within the Keil IDE -
@@ -133,20 +126,16 @@ unsigned long ulTaskNumber[ configEXPECTED_NO_RUNNING_TASKS ];
 
 int main(void)
 {
-	/* Create the queue. */
-	xQueue = xQueueCreate( mainQUEUE_LENGTH, sizeof( unsigned long ) );
-
-	if( xQueue != NULL )
-	{
-		/* Start the two tasks as described in the accompanying application
-		note. */
-		xTaskCreate( prvQueueReceiveTask, ( signed char * ) "Rx", configMINIMAL_STACK_SIZE, NULL, mainQUEUE_RECEIVE_TASK_PRIORITY, NULL );
-		xTaskCreate( prvQueueSendTask, ( signed char * ) "TX", configMINIMAL_STACK_SIZE, NULL, mainQUEUE_SEND_TASK_PRIORITY, NULL );
-
-		/* Start the tasks running. */
-		vTaskStartScheduler();
-	}
-
+	xTaskCreate( prvTaskA, ( signed char * ) "Task_A", configMINIMAL_STACK_SIZE, NULL, mainQUEUE_A_TASK_PRIORITY, NULL );
+	xTaskCreate( prvTaskB, ( signed char * ) "Task_B", configMINIMAL_STACK_SIZE, NULL, mainQUEUE_B_TASK_PRIORITY, NULL );
+	xTaskCreate( prvTaskC, ( signed char * ) "Task_C", configMINIMAL_STACK_SIZE, NULL, mainQUEUE_C_TASK_PRIORITY, NULL );
+	
+	/* Start the tasks running. */
+	vTaskStartScheduler();
+	
+	// Call the custom EDF scheduler
+	
+	
 	/* If all is well we will never reach here as the scheduler will now be
 	running.  If we do reach here then it is likely that there was insufficient
 	heap available for the idle task to be created. */
@@ -154,53 +143,52 @@ int main(void)
 }
 /*-----------------------------------------------------------*/
 
-static void prvQueueSendTask( void *pvParameters )
+static void prvTaskC( void *pvParameters )
 {
-portTickType xNextWakeTime;
-const unsigned long ulValueToSend = 100UL;
+	portTickType xLastWakeTime;
+	const portTickType xFrequency = 8 * MSEC_IN_SEC;
+	const portTickType xExecTime = 3 * MSEC_IN_SEC;
 
-	/* Initialise xNextWakeTime - this only needs to be done once. */
-	xNextWakeTime = xTaskGetTickCount();
+	xLastWakeTime = xTaskGetTickCount();
 
 	for( ;; )
 	{
-		/* Place this task in the blocked state until it is time to run again.
-		The block time is specified in ticks, the constant used converts ticks
-		to ms.  While in the Blocked state this task will not consume any CPU
-		time. */
-		vTaskDelayUntil( &xNextWakeTime, mainQUEUE_SEND_FREQUENCY_MS );
-
-		/* Send to the queue - causing the queue receive task to unblock and
-		print out a message.  0 is used as the block time so the sending 
-		operation will not block - it shouldn't need to block as the queue 
-		should always be empty at this point in the code. */
-		xQueueSend( xQueue, &ulValueToSend, 0 );
+		vTaskDelay(xExecTime);
+		vTaskDelayUntil(&xLastWakeTime, xFrequency);
 	}
 }
 /*-----------------------------------------------------------*/
 
-static void prvQueueReceiveTask( void *pvParameters )
+
+static void prvTaskB( void *pvParameters )
 {
-unsigned long ulReceivedValue;
+	portTickType xLastWakeTime;
+	const portTickType xFrequency = 6 * MSEC_IN_SEC;
+	const portTickType xExecTime = 2 * MSEC_IN_SEC;
+
+	
+	xLastWakeTime = xTaskGetTickCount();
 
 	for( ;; )
 	{
-		/* Wait until something arrives in the queue - this task will block
-		indefinitely provided INCLUDE_vTaskSuspend is set to 1 in
-		FreeRTOSConfig.h. */
-		xQueueReceive( xQueue, &ulReceivedValue, portMAX_DELAY );
+		vTaskDelay(xExecTime);
+		vTaskDelayUntil(&xLastWakeTime, xFrequency);
+	}
+}
+/*-----------------------------------------------------------*/
 
-		/*  To get here something must have been received from the queue, but
-		is it the expected value?  If it is, print out a pass message, if no,
-		print out a fail message. */
-		if( ulReceivedValue == 100UL )
-		{
-			printf( "Value 100 received - Tick = 0x%x\r\n", xTaskGetTickCount() );
-		}
-		else
-		{
-			printf( "Received an unexpected value\r\n" );
-		}
+static void prvTaskA( void *pvParameters )
+{
+	portTickType xLastWakeTime;
+	const portTickType xFrequency = 4 * MSEC_IN_SEC;
+	const portTickType xExecTime = 1 * MSEC_IN_SEC;
+	
+	xLastWakeTime = xTaskGetTickCount();
+
+	for( ;; )
+	{
+		vTaskDelay(xExecTime);
+		vTaskDelayUntil(&xLastWakeTime, xFrequency);
 	}
 }
 /*-----------------------------------------------------------*/
