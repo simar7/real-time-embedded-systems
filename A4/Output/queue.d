@@ -1,0 +1,12 @@
+.\Output\queue.o: FreeRTOS-Source\queue.c
+.\Output\queue.o: C:\Software\Keil\ARM\ARMCC\bin\..\include\stdlib.h
+.\Output\queue.o: C:\Software\Keil\ARM\ARMCC\bin\..\include\string.h
+.\Output\queue.o: .\FreeRTOS-Source\include\FreeRTOS.h
+.\Output\queue.o: C:\Software\Keil\ARM\ARMCC\bin\..\include\stddef.h
+.\Output\queue.o: .\FreeRTOS-Source\include\projdefs.h
+.\Output\queue.o: .\FreeRTOSConfig.h
+.\Output\queue.o: .\FreeRTOS-Source\include\portable.h
+.\Output\queue.o: .\FreeRTOS-Source\portable\RVDS\ARM_CM3\portmacro.h
+.\Output\queue.o: .\FreeRTOS-Source\include\mpu_wrappers.h
+.\Output\queue.o: .\FreeRTOS-Source\include\task.h
+.\Output\queue.o: .\FreeRTOS-Source\include\list.h
