@@ -64,10 +64,12 @@
     the SafeRTOS brand: http://www.SafeRTOS.com.
 */
 
+
 /* Kernel includes. */
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
+#include "timers.h"
 
 /* Standard include. */
 #include <stdio.h>
@@ -78,6 +80,18 @@
 
 /* Global Constants */
 #define MSEC_IN_SEC 1000
+#define NUM_TIMERS 3
+
+/* An array to hold handles to the created timers. */
+xTimerHandle xTimers[ NUM_TIMERS ];
+
+/* An array to hold a count of the number of times each timer expires. */
+long lExpireCounters[ NUM_TIMERS ] = { 0 };
+
+/* Global counter to hold which timer expired */
+long lArrayIndexofTimer;
+
+/*-----------------------------------------------------------*/
 
 /* Priorities at which the tasks are created. */
 #define mainQUEUE_A_TASK_PRIORITY		( tskIDLE_PRIORITY + 3 )
@@ -107,6 +121,8 @@ the Keil simulator IDE. */
 static void prvTaskA( void *pvParameters );
 static void prvTaskB( void *pvParameters );
 static void prvTaskC( void *pvParameters );
+void vTimerCallback( xTimerHandle pxTimer );
+
 
 /*
  * Redirects the printf() output to the serial window in the Keil simulator
@@ -126,15 +142,52 @@ unsigned long ulTaskNumber[ configEXPECTED_NO_RUNNING_TASKS ];
 
 int main(void)
 {
+	
+	long x;
+
+	
 	xTaskCreate( prvTaskA, ( signed char * ) "Task_A", configMINIMAL_STACK_SIZE, NULL, mainQUEUE_A_TASK_PRIORITY, NULL );
 	xTaskCreate( prvTaskB, ( signed char * ) "Task_B", configMINIMAL_STACK_SIZE, NULL, mainQUEUE_B_TASK_PRIORITY, NULL );
 	xTaskCreate( prvTaskC, ( signed char * ) "Task_C", configMINIMAL_STACK_SIZE, NULL, mainQUEUE_C_TASK_PRIORITY, NULL );
 	
+
+	 /* Create then start some timers.  Starting the timers before the RTOS scheduler
+	 has been started means the timers will start running immediately that
+	 the RTOS scheduler starts. */
+	 for( x = 0; x < NUM_TIMERS; x++ )
+	 {
+			 xTimers[ x ] = xTimerCreate
+						(  /* Just a text name, not used by the RTOS kernel. */
+									 "Timer",
+									 /* The timer period in ticks. */
+									 ( 100 * x ),
+									 /* The timers will auto-reload themselves when they expire. */
+									 pdTRUE,
+									 /* Assign each timer a unique id equal to its array index. */
+									 ( void * ) x,
+									 /* Each timer calls the same callback when it expires. */
+									 vTimerCallback
+						);
+
+			 if( xTimers[ x ] == NULL )
+			 {
+					 /* The timer was not created. */
+			 }
+			 else
+			 {
+					 /* Start the timer.  No block time is specified, and even if one was
+					 it would be ignored because the RTOS scheduler has not yet been
+					 started. */
+					 if( xTimerStart( xTimers[ x ], 0 ) != pdPASS )
+					 {
+							 /* The timer could not be set into the Active state. */
+					 }
+			 }
+		}
+			 
 	/* Start the tasks running. */
 	vTaskStartScheduler();
-	
-	// Call the custom EDF scheduler
-	
+
 	
 	/* If all is well we will never reach here as the scheduler will now be
 	running.  If we do reach here then it is likely that there was insufficient
@@ -143,18 +196,39 @@ int main(void)
 }
 /*-----------------------------------------------------------*/
 
+
+ /* Define a callback function that will be used by multiple timer instances.
+ The callback function does nothing but count the number of times the
+ associated timer expires, and stop the timer once the timer has expired
+ 10 times. */
+ void vTimerCallback( xTimerHandle pxTimer )
+{
+
+	 /* Optionally do something if the pxTimer parameter is NULL. */
+	 configASSERT( pxTimer );
+
+	 /* Which timer expired? */
+	 lArrayIndexofTimer = ( long ) pvTimerGetTimerID( pxTimer );
+
+	 /* Increment the number of times that pxTimer has expired. */
+	 lExpireCounters[ lArrayIndexofTimer ] += 1;
+
+}
+
+/*-----------------------------------------------------------*/
+
 static void prvTaskC( void *pvParameters )
 {
 	portTickType xLastWakeTime;
 	const portTickType xFrequency = 8 * MSEC_IN_SEC;
-	const portTickType xExecTime = 3 * MSEC_IN_SEC;
 
 	xLastWakeTime = xTaskGetTickCount();
 
 	for( ;; )
 	{
-		vTaskDelay(xExecTime);
-		vTaskDelayUntil(&xLastWakeTime, xFrequency);
+		if ( lArrayIndexofTimer == 0) {
+			vTaskDelayUntil(&xLastWakeTime, xFrequency);
+		}
 	}
 }
 /*-----------------------------------------------------------*/
@@ -164,15 +238,14 @@ static void prvTaskB( void *pvParameters )
 {
 	portTickType xLastWakeTime;
 	const portTickType xFrequency = 6 * MSEC_IN_SEC;
-	const portTickType xExecTime = 2 * MSEC_IN_SEC;
-
 	
 	xLastWakeTime = xTaskGetTickCount();
 
 	for( ;; )
 	{
-		vTaskDelay(xExecTime);
-		vTaskDelayUntil(&xLastWakeTime, xFrequency);
+		if ( lArrayIndexofTimer == 1) {
+			vTaskDelayUntil(&xLastWakeTime, xFrequency);
+		}
 	}
 }
 /*-----------------------------------------------------------*/
@@ -181,14 +254,14 @@ static void prvTaskA( void *pvParameters )
 {
 	portTickType xLastWakeTime;
 	const portTickType xFrequency = 4 * MSEC_IN_SEC;
-	const portTickType xExecTime = 1 * MSEC_IN_SEC;
 	
 	xLastWakeTime = xTaskGetTickCount();
 
 	for( ;; )
 	{
-		vTaskDelay(xExecTime);
-		vTaskDelayUntil(&xLastWakeTime, xFrequency);
+		if ( lArrayIndexofTimer == 2) {
+			vTaskDelayUntil(&xLastWakeTime, xFrequency);
+		}
 	}
 }
 /*-----------------------------------------------------------*/
