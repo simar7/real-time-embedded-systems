@@ -75,6 +75,7 @@
 
 /* Global Constants */
 #define MSEC_IN_SEC 1000
+#define ONE_SEC_IN_SIM 1680000
 
 /* Deadline arrays */
 int dar[4] = {0, 4, 6, 8};
@@ -136,17 +137,18 @@ int main(void)
 }
 /*-----------------------------------------------------------*/
 
+/*
+	Calculate the priorities depending upon the current state of the
+	deadlines. This function is called from within each task before
+	and after running the task for the given period of time.
+*/
 void setPri()
 {
 	/*
-		1 > 2 > 3 -
-		2 > 1 > 3 -
-		3 > 2 < 1 -
-	
-		2 > 3 > 1
-		1 > 3 > 2
-		3 > 1 > 2
-		
+		Type 1 Conditions:
+		1 > 2 > 3
+		2 > 1 > 3
+		3 > 2 < 1
 	*/
 	if (dar[1] > dar[2]) {
 		if (dar[2] > dar[3]) {
@@ -176,6 +178,7 @@ void setPri()
 	}
 
 	/* 
+		Type 2 conditions:
 		2 > 3 > 1
 		1 > 3 > 2
 		3 > 1 > 2
@@ -205,6 +208,7 @@ void setPri()
 		}
 	}
 	/*
+		Type 3 conditions (equality conditions):
 		1 = 2 , 1 > 3
 		1 = 2 , 1 < 3
 		1 = 3 , 1 > 2
@@ -288,7 +292,7 @@ static void prvTaskC( void *pvParameters )
 	for( ;; )
 	{
 			setPri();
-			for(wait_counter = 0; wait_counter < 3 * 1680000; wait_counter++) {}
+			for(wait_counter = 0; wait_counter < 3 * ONE_SEC_IN_SIM; wait_counter++) {}
 			vTaskDelayUntil(&xNextWakeTime, xFrequency);
 			dar[3] += 8;
 			setPri();
@@ -308,7 +312,7 @@ static void prvTaskB( void *pvParameters )
 	for( ;; )
 	{			
 			setPri();
-			for(wait_counter = 0; wait_counter < 2 * 1680000; wait_counter++) {}
+			for(wait_counter = 0; wait_counter < 2 * ONE_SEC_IN_SIM; wait_counter++) {}
 			vTaskDelayUntil(&xNextWakeTime, xFrequency);
 			dar[2] += 6;
 			setPri();
@@ -327,7 +331,7 @@ static void prvTaskA( void *pvParameters )
 	for( ;; )
 	{
 			setPri();
-			for(wait_counter = 0; wait_counter < 1680000; wait_counter++) {}
+			for(wait_counter = 0; wait_counter < ONE_SEC_IN_SIM; wait_counter++) {}
 			vTaskDelayUntil(&xNextWakeTime, xFrequency);
 			dar[1] += 4;
 			setPri();
