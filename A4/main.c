@@ -267,6 +267,11 @@ void setPri()
 		}
 	}
 	
+	// if we ever reach here set them as outlined
+	vTaskPrioritySet(task3, 1);
+	vTaskPrioritySet(task1, 3);
+	vTaskPrioritySet(task2, 2);
+	
 }
 
 
@@ -282,6 +287,7 @@ static void prvTaskC( void *pvParameters )
 
 	for( ;; )
 	{
+			setPri();
 			for(wait_counter = 0; wait_counter < 3 * 1680000; wait_counter++) {}
 			vTaskDelayUntil(&xNextWakeTime, xFrequency);
 			dar[3] += 8;
@@ -301,6 +307,7 @@ static void prvTaskB( void *pvParameters )
 
 	for( ;; )
 	{			
+			setPri();
 			for(wait_counter = 0; wait_counter < 2 * 1680000; wait_counter++) {}
 			vTaskDelayUntil(&xNextWakeTime, xFrequency);
 			dar[2] += 6;
@@ -319,6 +326,7 @@ static void prvTaskA( void *pvParameters )
 
 	for( ;; )
 	{
+			setPri();
 			for(wait_counter = 0; wait_counter < 1680000; wait_counter++) {}
 			vTaskDelayUntil(&xNextWakeTime, xFrequency);
 			dar[1] += 4;
